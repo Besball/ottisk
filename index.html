@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; manifest-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+<meta name="color-scheme" content="light dark">
+<title>Оттиск</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<meta name="theme-color" content="#2b36b3">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Оттиск">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="description" content="Печать и подпись на PDF с телефона: сфотографируйте печать, распишитесь пальцем, отсканируйте документ. Всё остаётся на устройстве.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<!-- ГЛАВНАЯ -->
+<section class="screen" id="home">
+  <header class="bar">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><circle cx="15" cy="15" r="13" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="15" cy="15" r="8.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M15 10.6l1.3 2.7 3 .4-2.2 2.1.5 3-2.6-1.4-2.6 1.4.5-3-2.2-2.1 3-.4z" fill="currentColor"/></svg>
+      <span class="logo" data-i="appName"></span>
+    </div>
+    <button class="icon-btn" id="infoBtn" type="button" data-i-al="about">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8.2" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 9v5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="6.2" r="1.1" fill="currentColor"/></svg>
+    </button>
+  </header>
+
+  <div class="home-body">
+    <button class="hero" id="openPdfBtn" type="button">
+      <span class="hero-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M7 3h8l6 6v13a1.5 1.5 0 0 1-1.5 1.5h-12.5A1.5 1.5 0 0 1 5.5 22V4.5A1.5 1.5 0 0 1 7 3z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 3v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 17.5c1.5-2 2.5-.5 3.5-1.5s1.5-2 3-.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+      <span class="hero-txt"><b data-i="openPdf"></b><small id="openPdfHint"></small></span>
+    </button>
+    <input class="vh" type="file" id="pdfIn" accept="application/pdf,.pdf">
+    <button class="hero hero-alt" id="scanBtn" type="button">
+      <span class="hero-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M3 8.5V5.5A2.5 2.5 0 0 1 5.5 3h3M17.5 3h3A2.5 2.5 0 0 1 23 5.5v3M23 17.5v3a2.5 2.5 0 0 1-2.5 2.5h-3M8.5 23h-3A2.5 2.5 0 0 1 3 20.5v-3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><path d="M8 8.5h10M8 12.5h10M8 16.5h6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+      <span class="hero-txt"><b data-i="scanDoc"></b><small data-i="scanHint"></small></span>
+    </button>
+    <input class="vh" type="file" id="scanCam" accept="image/*" capture="environment">
+    <input class="vh" type="file" id="scanGal" accept="image/*">
+
+    <div class="sec-head"><h2 data-i="myMarks"></h2><span class="count" id="libCount"></span></div>
+    <div class="add-row" id="homeAddRow">
+      <button class="add-tile" id="addStampBtn" type="button">
+        <span class="add-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 22 22"><path d="M3 7.5A1.5 1.5 0 0 1 4.5 6h2.2l1.4-2h5.8l1.4 2h2.2A1.5 1.5 0 0 1 19 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 3 16.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="11" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg></span>
+        <b data-i="addStamp"></b><small data-i="addStampHint"></small>
+      </button>
+      <button class="add-tile" id="addSignBtn" type="button">
+        <span class="add-ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 18 18"><path d="M3 15l1-4 8.2-8.2a1.4 1.4 0 0 1 2 0l1 1a1.4 1.4 0 0 1 0 2L7 14z M10.8 4.2l3 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg></span>
+        <b data-i="addSign"></b><small data-i="addSignHint"></small>
+      </button>
+    </div>
+    <input class="vh" type="file" id="imgIn" accept="image/*">
+    <input class="vh" type="file" id="imgCam" accept="image/*" capture="environment">
+    <div class="lib" id="lib"></div>
+    <button class="link" id="trySample" type="button" data-i="trySample"></button>
+    <p class="note"><svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><rect x="2.5" y="6" width="9" height="6.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M4.5 6V4.5a2.5 2.5 0 0 1 5 0V6" fill="none" stroke="currentColor" stroke-width="1.3"/></svg><span data-i="privacyNote"></span></p>
+  </div>
+</section>
+
+<!-- ДОКУМЕНТ -->
+<section class="screen" id="docScreen" hidden>
+  <header class="bar">
+    <button class="icon-btn" id="backBtn" type="button" data-i-al="back">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="doc-title"><span id="docName"></span><small id="docMeta"></small></div>
+    <button class="icon-btn" id="undoBtn" type="button" data-i-al="undoDoc" disabled>
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 5L3.5 9l4 4" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 9h7.5a4.5 4.5 0 0 1 0 9H9" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+    </button>
+    <button class="icon-btn zoom" id="zoomBtn" type="button" data-i-al="zoom">100%</button>
+    <button class="btn primary" id="doneBtn" type="button"></button>
+  </header>
+  <div class="banner" id="banner" hidden><b data-i="sampleB"></b> <span data-i="sampleText"></span></div>
+  <div class="pages" id="pages"></div>
+
+  <div class="tray" id="tray">
+    <div class="tray-hint" id="trayHint" data-i="trayHint"></div>
+    <div class="tray-list" id="trayList"></div>
+  </div>
+
+  <div class="selbar" id="selbar" hidden>
+    <div class="sb-row">
+      <span class="sb-label" data-i="width"></span>
+      <button class="icon-btn sm" id="sbMinus" type="button" data-i-al="narrower">−</button>
+      <input class="sb-num" id="sbW" type="number" inputmode="numeric" min="5" max="250" step="1" data-i-al="widthMm">
+      <span class="unit" data-i="mm"></span>
+      <button class="icon-btn sm" id="sbPlus" type="button" data-i-al="wider">+</button>
+      <label class="sb-op"><span class="sb-label" data-i="brightness"></span><input id="sbOp" type="range" min="35" max="100" step="1"></label>
+    </div>
+    <div class="sb-row">
+      <button class="btn small" id="sbRot90" type="button" aria-label="90°">↻ 90°</button>
+      <button class="btn small" id="sbRot" type="button" data-i="straighten"></button>
+      <button class="btn small" id="sbAdj" type="button" data-i="adjust"></button>
+      <button class="btn small" id="sbAll" type="button" data-i="allPages"></button>
+      <button class="btn small danger" id="sbDel" type="button" data-i="del"></button>
+      <button class="btn small primary" id="sbOk" type="button" data-i="ok"></button>
+    </div>
+  </div>
+</section>
+
+<!-- ПЕЧАТЬ ПО ФОТО -->
+<div class="modal" id="editor" hidden role="dialog" aria-modal="true" aria-labelledby="edTitle">
+  <div class="sheet two">
+    <section class="pane">
+      <span class="step" data-i="step1"></span>
+      <h3 id="edTitle" data-i="cropTitle"></h3>
+      <p data-i="cropHint"></p>
+      <div class="stage"><canvas id="cropCv"></canvas></div>
+      <div class="row">
+        <button class="btn small" id="edRotate" type="button" data-i="rotate90"></button>
+        <button class="btn small" id="edFull" type="button" data-i="fullPhoto"></button>
+        <button class="btn small" id="edOther" type="button" data-i="otherPhoto"></button>
+      </div>
+    </section>
+    <section class="pane">
+      <span class="step" data-i="step2"></span>
+      <h3 data-i="resultTitle"></h3>
+      <div class="stage res checker" id="resBox"><canvas id="resCv"></canvas><span class="busy" id="busy" hidden data-i="processing"></span></div>
+      <div class="row">
+        <span class="lbl" data-i="checkBg"></span>
+        <div class="seg" id="bgSeg">
+          <button type="button" data-v="checker" aria-pressed="true" data-i="bgClear"></button>
+          <button type="button" data-v="white" aria-pressed="false" data-i="bgWhite"></button>
+          <button type="button" data-v="dark" aria-pressed="false" data-i="bgDark"></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="seg" id="kindSeg">
+          <button type="button" data-v="stamp" aria-pressed="true" data-i="kindStamp"></button>
+          <button type="button" data-v="sign" aria-pressed="false" data-i="kindSign"></button>
+          <button type="button" data-v="other" aria-pressed="false" data-i="kindOther"></button>
+        </div>
+        <input class="text-in grow" id="edName" type="text" maxlength="60" data-i-ph="namePh">
+      </div>
+      <span class="lbl" data-i="inkColor"></span>
+      <div class="swatches" id="colorSeg">
+        <button class="sw" type="button" data-v="orig" aria-pressed="true"><i style="background:conic-gradient(#2b36b3,#6b3fb0,#1d2c8f,#2b36b3)"></i><span data-i="colorOrig"></span></button>
+        <button class="sw" type="button" data-v="auto" aria-pressed="false"><i id="autoSw" style="background:#2b36b3"></i><span data-i="colorAuto"></span></button>
+        <button class="sw" type="button" data-v="#1f3cb4" aria-pressed="false"><i style="background:#1f3cb4"></i><span data-i="colorBlue"></span></button>
+        <button class="sw" type="button" data-v="#4a2ea3" aria-pressed="false"><i style="background:#4a2ea3"></i><span data-i="colorViolet"></span></button>
+        <button class="sw" type="button" data-v="#15161c" aria-pressed="false"><i style="background:#15161c"></i><span data-i="colorBlack"></span></button>
+      </div>
+      <label class="field"><span data-i="pThr"></span><input type="range" id="pThr" min="3" max="45" value="13"><output id="oThr">13</output></label>
+      <label class="field"><span data-i="pSoft"></span><input type="range" id="pSoft" min="4" max="50" value="20"><output id="oSoft">20</output></label>
+      <label class="field"><span data-i="pDen"></span><input type="range" id="pDen" min="60" max="250" value="135"><output id="oDen">135</output></label>
+      <label class="field"><span data-i="pSpk"></span><input type="range" id="pSpk" min="0" max="100" value="30"><output id="oSpk">30</output></label>
+      <div class="foot">
+        <button class="btn" id="edCancel" type="button" data-i="cancel"></button>
+        <button class="btn primary" id="edSave" type="button" data-i="save"></button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ПОДПИСЬ НА ЭКРАНЕ -->
+<div class="modal" id="pad" hidden role="dialog" aria-modal="true" aria-labelledby="padTitle">
+  <div class="sheet">
+    <section class="pane">
+      <span class="step" data-i="padStep"></span>
+      <h3 id="padTitle" data-i="padTitle"></h3>
+      <p data-i="padHint"></p>
+      <div class="padwrap" id="padWrap">
+        <span class="pad-line" aria-hidden="true"></span><span class="pad-x" aria-hidden="true">×</span>
+        <span class="pad-hint" id="padHere" data-i="padHere"></span>
+        <canvas id="padCv"></canvas>
+      </div>
+      <div class="row">
+        <div class="swatches" id="padColor">
+          <button class="sw" type="button" data-v="#1b2a8c" aria-pressed="true"><i style="background:#1b2a8c"></i><span data-i="penBlue"></span></button>
+          <button class="sw" type="button" data-v="#15161c" aria-pressed="false"><i style="background:#15161c"></i><span data-i="penBlack"></span></button>
+          <button class="sw" type="button" data-v="#4a2ea3" aria-pressed="false"><i style="background:#4a2ea3"></i><span data-i="penViolet"></span></button>
+        </div>
+        <label class="sb-op"><span class="sb-label" data-i="thickness"></span><input type="range" id="padW" min="1" max="6" step="0.5" value="3"></label>
+      </div>
+      <div class="row">
+        <input class="text-in grow" id="padName" type="text" maxlength="60" data-i-ph="padNamePh">
+        <button class="btn small" id="padUndo" type="button" data-i="undo"></button>
+        <button class="btn small" id="padClear" type="button" data-i="clear"></button>
+      </div>
+      <div class="foot">
+        <button class="btn" id="padCancel" type="button" data-i="cancel"></button>
+        <button class="btn primary" id="padSave" type="button" data-i="save"></button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- КАРТОЧКА ОТТИСКА -->
+<div class="modal" id="itemSheet" hidden role="dialog" aria-modal="true" aria-labelledby="isNameLbl">
+  <div class="sheet small">
+    <section class="pane">
+      <div class="thumb big"><img id="isImg" alt=""></div>
+      <label class="lbl" id="isNameLbl" for="isName" data-i="nameLbl"></label>
+      <input class="text-in" id="isName" type="text" maxlength="60">
+      <div class="foot spread">
+        <button class="btn danger" id="isDel" type="button" data-i="del"></button>
+        <span class="grow"></span>
+        <button class="btn" id="isAdj" type="button" data-i="adjust"></button>
+        <button class="btn" id="isPng" type="button" data-i="savePng"></button>
+        <button class="btn primary" id="isClose" type="button" data-i="done"></button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- СКАНЕР -->
+<div class="modal" id="scanSheet" hidden role="dialog" aria-modal="true" aria-labelledby="scanTitle">
+  <div class="sheet">
+    <section class="pane" id="scanCrop">
+      <span class="step" data-i="scanTitle"></span>
+      <h3 id="scanTitle" data-i="cornersTitle"></h3>
+      <p data-i="cornersHint"></p>
+      <div class="stage scan-stage"><canvas id="scanCv"></canvas></div>
+      <div class="row">
+        <button class="btn small" id="scanRotate" type="button" data-i="rotate90"></button>
+        <button class="btn small" id="scanFull" type="button" data-i="scanFullFrame"></button>
+        <button class="btn small" id="scanRetake" type="button" data-i="scanRetake"></button>
+      </div>
+      <div class="foot">
+        <button class="btn" id="scanCancel" type="button" data-i="cancel"></button>
+        <button class="btn primary" id="scanNext" type="button" data-i="scanCropApply"></button>
+      </div>
+    </section>
+    <section class="pane" id="scanPages" hidden>
+      <div class="row spread"><span class="step" data-i="scanTitle"></span><span class="count" id="scanCount"></span></div>
+      <div class="stage scan-prev"><img id="scanPrev" alt=""></div>
+      <div class="seg" id="scanMode">
+        <button type="button" data-v="doc" aria-pressed="true" data-i="modeDoc"></button>
+        <button type="button" data-v="color" aria-pressed="false" data-i="modeColor"></button>
+        <button type="button" data-v="orig" aria-pressed="false" data-i="modeOrig"></button>
+      </div>
+      <div class="scan-strip" id="scanStrip"></div>
+      <div class="row">
+        <button class="btn small" id="scanAdd" type="button" data-i="scanAddPage"></button>
+        <button class="btn small" id="scanAddGal" type="button" data-i="scanFromGallery"></button>
+        <button class="btn small danger" id="scanDelPage" type="button" data-i="scanDelPage"></button>
+      </div>
+      <div class="foot">
+        <button class="btn" id="scanCancel2" type="button" data-i="cancel"></button>
+        <button class="btn primary" id="scanDone" type="button" data-i="scanDoneBtn"></button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- НАСТРОИТЬ ОТТИСК -->
+<div class="modal" id="adjSheet" hidden role="dialog" aria-modal="true" aria-labelledby="adjTitle">
+  <div class="sheet small">
+    <section class="pane">
+      <h3 id="adjTitle" data-i="adjTitle"></h3>
+      <div class="stage res checker adj-stage" id="adjBox"><canvas id="adjCv"></canvas></div>
+      <div class="row">
+        <span class="lbl" data-i="checkBg"></span>
+        <div class="seg" id="adjBg">
+          <button type="button" data-v="checker" aria-pressed="true" data-i="bgClear"></button>
+          <button type="button" data-v="white" aria-pressed="false" data-i="bgWhite"></button>
+        </div>
+      </div>
+      <span class="lbl" data-i="adjColor"></span>
+      <div class="swatches" id="adjColor">
+        <button class="sw" type="button" data-v="orig" aria-pressed="true"><i style="background:conic-gradient(#2b36b3,#6b3fb0,#1d2c8f,#2b36b3)"></i><span data-i="adjAsIs"></span></button>
+        <button class="sw" type="button" data-v="#1f3cb4" aria-pressed="false"><i style="background:#1f3cb4"></i><span data-i="colorBlue"></span></button>
+        <button class="sw" type="button" data-v="#4a2ea3" aria-pressed="false"><i style="background:#4a2ea3"></i><span data-i="colorViolet"></span></button>
+        <button class="sw" type="button" data-v="#15161c" aria-pressed="false"><i style="background:#15161c"></i><span data-i="colorBlack"></span></button>
+        <button class="sw" type="button" data-v="#b3262e" aria-pressed="false"><i style="background:#b3262e"></i><span data-i="colorRed"></span></button>
+        <label class="sw" id="adjCustomSw"><i id="adjCustomDot" style="background:#2b9348"></i><span data-i="colorCustom"></span><input class="vh" type="color" id="adjCustom" value="#2b9348"></label>
+      </div>
+      <label class="field"><span data-i="adjWeight"></span><input type="range" id="adjW" min="-3" max="4" step="1" value="0"><output id="adjWo">0</output></label>
+      <label class="field"><span data-i="adjDensity"></span><input type="range" id="adjD" min="40" max="220" step="5" value="100"><output id="adjDo">100</output></label>
+      <label class="field"><span data-i="adjSharp"></span><input type="range" id="adjS" min="0" max="100" step="5" value="0"><output id="adjSo">0</output></label>
+      <label class="check" id="adjAlsoRow"><input type="checkbox" id="adjAlso" checked><span data-i="adjAlsoLib"></span></label>
+      <div class="foot">
+        <button class="btn" id="adjReset" type="button" data-i="reset"></button>
+        <span class="grow"></span>
+        <button class="btn" id="adjCancel" type="button" data-i="cancel"></button>
+        <button class="btn primary" id="adjApply" type="button" data-i="apply"></button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ФОТО: КАМЕРА ИЛИ ГАЛЕРЕЯ (Android) -->
+<div class="modal" id="photoSheet" hidden role="dialog" aria-modal="true" aria-labelledby="photoTitle">
+  <div class="sheet small">
+    <section class="pane">
+      <h3 id="photoTitle" data-i="photoFrom"></h3>
+      <div class="add-row">
+        <button class="add-tile" id="photoCam" type="button"><b data-i="fromCamera"></b></button>
+        <button class="add-tile" id="photoGal" type="button"><b data-i="fromGallery"></b></button>
+      </div>
+      <div class="foot"><button class="btn" id="photoClose" type="button" data-i="cancel"></button></div>
+    </section>
+  </div>
+</div>
+
+<!-- ЧТО ДОБАВИТЬ -->
+<div class="modal" id="addSheet" hidden role="dialog" aria-modal="true" aria-labelledby="addWhatTitle">
+  <div class="sheet small">
+    <section class="pane">
+      <h3 id="addWhatTitle" data-i="addWhat"></h3>
+      <div class="add-row">
+        <button class="add-tile" id="addSheetStamp" type="button"><b data-i="addStamp"></b><small data-i="addStampHint"></small></button>
+        <button class="add-tile" id="addSheetSign" type="button"><b data-i="addSign"></b><small data-i="addSignHint"></small></button>
+      </div>
+      <div class="foot"><button class="btn" id="addSheetClose" type="button" data-i="cancel"></button></div>
+    </section>
+  </div>
+</div>
+
+<!-- ПРАВОВАЯ ОГОВОРКА (один раз) -->
+<div class="modal" id="legalSheet" hidden role="dialog" aria-modal="true" aria-labelledby="legalTitle">
+  <div class="sheet small">
+    <section class="pane">
+      <h3 id="legalTitle" data-i="legalTitle"></h3>
+      <p class="body" data-i="legalOwn"></p>
+      <p class="body" data-i="legalFacsimile"></p>
+      <div class="foot"><button class="btn primary" id="legalOk" type="button" data-i="legalOk"></button></div>
+    </section>
+  </div>
+</div>
+
+<!-- ПОДТВЕРЖДЕНИЕ -->
+<div class="modal" id="confirmSheet" hidden role="alertdialog" aria-modal="true" aria-labelledby="cfText">
+  <div class="sheet small">
+    <section class="pane">
+      <p class="body" id="cfText"></p>
+      <div class="foot">
+        <button class="btn" id="cfNo" type="button"></button>
+        <button class="btn primary" id="cfYes" type="button"></button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- О ПРИЛОЖЕНИИ -->
+<div class="modal" id="infoSheet" hidden role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+  <div class="sheet small">
+    <section class="pane">
+      <h3 id="infoTitle" data-i="about"></h3>
+      <ol class="steps">
+        <li data-i="how1"></li>
+        <li data-i="how2"></li>
+        <li data-i="how3"></li>
+      </ol>
+      <span class="lbl" data-i="legalHead"></span>
+      <p class="body" data-i="legalFacsimile"></p>
+      <span class="lbl" data-i="privacyHead"></span>
+      <p class="body" data-i="privacyText"></p>
+      <div class="row">
+        <span class="lbl" data-i="language"></span>
+        <div class="seg" id="langSeg">
+          <button type="button" data-v="ru" aria-pressed="false">Русский</button>
+          <button type="button" data-v="en" aria-pressed="false">English</button>
+        </div>
+      </div>
+      <p class="ver" id="verText"></p>
+      <div class="foot"><button class="btn primary" id="infoClose" type="button" data-i="done"></button></div>
+    </section>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="vendor/pdf-lib.min.js"></script>
+<script src="app.js"></script>
+<script type="module" src="pdf-boot.mjs"></script>
+</body>
+</html>
